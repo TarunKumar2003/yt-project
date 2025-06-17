@@ -3,7 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -64,13 +64,14 @@ export async function POST(request: NextRequest) {
       uploadStream.end(buffer);
     });
 
-    const video = await prisma.video.Create({
+    const video = await prisma.video.create({
       data: {
-        title,
+        title: title || "Untitled",
         description,
         publicId: result.public_id,
-        originalSize: originalSize,
+        originalSize: originalSize || String(result.bytes),
         compressedSize: String(result.bytes),
+        url: result.secure_url || result.url || "",
         duration: result.duration || 0,
       },
     });
