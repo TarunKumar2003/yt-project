@@ -10,10 +10,10 @@ const socialFormats = {
   "Facebook Cover (205:78)": { width: 820, height: 312, aspectRatio: "205:78" },
 };
 
-type SocialFormet = keyof typeof socialFormats;
+type SocialFormat = keyof typeof socialFormats;
 const SocialShare = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [selectedFormat, setSelectedFormat] = useState<SocialFormet>(
+  const [selectedFormat, setSelectedFormat] = useState<SocialFormat>(
     "Instagram Square (1:1)"
   );
   const [isUploading, setIsUploading] = useState(false);
@@ -100,7 +100,7 @@ const SocialShare = () => {
                   className="select select-bordered w-full"
                   value={selectedFormat}
                   onChange={(e) =>
-                    setSelectedFormat(e.target.value as SocialFormet)
+                    setSelectedFormat(e.target.value as SocialFormat)
                   }
                 >
                   {Object.keys(socialFormats).map((format) => (

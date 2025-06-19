@@ -1,8 +1,10 @@
 "use client";
+
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import VideoComponent from "@/components/VideoComponent";
 import { Video } from "@/types";
+
 function Home() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,10 +16,10 @@ function Home() {
       if (Array.isArray(response.data)) {
         setVideos(response.data);
       } else {
-        throw new Error(" Unexpected response format");
+        throw new Error("Unexpected response format");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error(err);
       setError("Failed to fetch videos");
     } finally {
       setLoading(false);
@@ -29,7 +31,7 @@ function Home() {
   }, [fetchVideos]);
 
   const handleDownload = useCallback((url: string, title: string) => {
-    () => {
+    return () => {
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", `${title}.mp4`);
@@ -41,14 +43,26 @@ function Home() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen text-lg text-white">
+        Loading videos...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500 text-lg">
+        {error}
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Videos</h1>
+      <h1 className="text-2xl font-bold mb-4 text-white">Videos</h1>
       {videos.length === 0 ? (
-        <div className="text-center text-lg text-gray-500">
+        <div className="text-center text-lg text-gray-400">
           No videos available
         </div>
       ) : (

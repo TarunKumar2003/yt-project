@@ -9,7 +9,7 @@ const isPublicRoute = createRouteMatcher([
 ]);
 const isPublicApiRoute = createRouteMatcher(["/api/videos"]);
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+  const userId = await auth();
   const currentUrl = new URL(req.url);
   const isAccessingDashnoard = currentUrl.pathname === "/home";
   const isApiRequest = currentUrl.pathname.startsWith("/api");
@@ -33,10 +33,5 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
